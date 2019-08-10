@@ -7,8 +7,8 @@ var svgHeight = 500;
 var margin = {
     top: 20,
     right: 40,
-    bottom: 60,
-    left: 50
+    bottom: 80,
+    left: 100
 };
 
 var width = svgWidth - margin.left - margin.right;
@@ -28,41 +28,6 @@ var svg = d3
 var scatterGroup = svg.append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// var chosenXAxis = "poverty"
-
-
-
-// function xScale(StateData, chosenXAxis) {
-//     // create scales
-//     var xLinearScale = d3.scaleLinear()
-//         .domain([d3.min(StateData, d => d[chosenXAxis]) * 0.8,
-//         d3.max(StateData, d => d[chosenXAxis]) * 1.2
-//         ])
-//         .range([0, width]);
-
-//     return xLinearScale;
-
-// }
-
-// function renderAxes(newXScale, xAxis) {
-//     var bottomAxis = d3.axisBottom(newXScale);
-
-//     xAxis.transition()
-//         .duration(1000)
-//         .call(bottomAxis);
-
-//     return xAxis;
-// }
-
-
-// function renderCircles(circlesGroup, newXScale, chosenXAxis) {
-
-//     circlesGroup.transition()
-//         .duration(1000)
-//         .attr("cx", d => newXScale(d[chosenXAxis]));
-
-//     return circlesGroup;
-// }
 // Import data
 d3.csv("assets/data/data.csv")
     .then(function (StateData, error) {
@@ -85,13 +50,6 @@ d3.csv("assets/data/data.csv")
         var xLinearScale = d3.scaleLinear()
             .range([0, width]);
 
-        // var xLinearScale = d3.scaleLinear()
-        //     .domain([d3.min(StateData, d => d[chosenXAxis]) * 0.8,
-        //     d3.max(StateData, d => d[chosenXAxis]) * 1.2
-        //     ])
-        //     .range([0, width]);
-        // var xLinearScale = xScale(StateData, chosenXAxis);
-
         var yLinearScale = d3.scaleLinear()
             .range([height, 0]);
 
@@ -110,12 +68,25 @@ d3.csv("assets/data/data.csv")
 
         // add axes
         // x-axis
-        var xAxis = scatterGroup.append("g")
+        scatterGroup.append("g")
             .attr("transform", `translate(0, ${height})`)
             .call(bottomAxis);
+        scatterGroup.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + 40)
+            .style("text-anchor", "middle")
+            .text("% Poverty");
 
         // y-axis
-        scatterGroup.append("g").call(leftAxis);
+        scatterGroup.append("g").call(leftAxis)
+
+        scatterGroup.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", 0 - (height / 2))
+            .attr("y", 0-margin.left)
+            // .attr("dy", "1em")
+            .classed("active", true)
+            .text("% Healthcare");
 
         //  Charting the data
         var circlesGroup = scatterGroup.selectAll("circle")
@@ -129,44 +100,6 @@ d3.csv("assets/data/data.csv")
             .attr("fill", "Cornflowerblue")
             .attr("opacity", ".5");
 
-        // var labelsGroup = scatterGroup.append("g")
-        //     .attr("transform", `translate(${width / 2}, ${height + 20})`);
-
-        // var povertyLengthLabel = labelsGroup.append("text")
-        //     .attr("x", 0)
-        //     .attr("y", 20)
-        //     .attr("value", "poverty") // value to grab for event listener
-        //     .classed("active", true)
-        //     .text("% of Poverty");
-
-        // var ageLabel = labelsGroup.append("text")
-        //     .attr("x", 0)
-        //     .attr("y", 40)
-        //     .attr("value", "age") // value to grab for event listener
-        //     .classed("inactive", true)
-        //     .text("Age (Median");
-
-        // // x axis labels event listener
-        // labelsGroup.selectAll("text")
-        //     .on("click", function () {
-        //         // get value of selection
-        //         var value = d3.select(this).attr("value");
-        //         if (value !== chosenXAxis) {
-
-        //             // replaces chosenXAxis with value
-        //             chosenXAxis = value;
-
-        // console.log(chosenXAxis)
-
-        // functions here found above csv import
-        // updates x scale for new data
-        // xLinearScale = xScale(StateData, d.poverty);
-
-        // // updates x axis with transition
-        // xAxis = renderAxes(xLinearScale, xAxis);
-
-        // // updates circles with new x values
-        // circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
 
         circlesGroup.append("text")
             .text(function (d) { return d.abbr })
@@ -178,60 +111,9 @@ d3.csv("assets/data/data.csv")
             .attr("r", 10)
             .attr("opacity", ".5");
 
-        //     if (chosenXAxis === "age") {
-        //         ageLabel
-        //           .classed("active", true)
-        //           .classed("inactive", false);
-        //         povertyLengthLabel
-        //           .classed("active", false)
-        //           .classed("inactive", true);
-        //       }
-        //       else {
-        //         ageLabel
-        //           .classed("active", false)
-        //           .classed("inactive", true);
-        //         povertyLengthLabel
-        //           .classed("active", true)
-        //           .classed("inactive", false);
-        //       }
-        //     }
-        //   });
-
 
         scatterGroup
             .append("path")
             .attr("d")
-
-
-
-        // var toolTip = d3.tip()
-        //     .attr("class", "tooltip")
-        //     .offset([80, -60])
-        //     .html(function (d) {
-        //         return ("test");
-        //     });
-        // scatterGroup.call(toolTip);
-
-        // scatterGroup.on("mouseover", function (data) {
-        //     toolTip.show(data);
-        // })
-
-        //     .on("mouseout", function (data, index) {
-        //         toolTip.hide(data);
-        //     });
-
-        // var toolTip = d3.select("body").append("div")
-        //     .attr("class", "tooltip");
-
-        // scatterGroup.on("mouseover", function (d, ) {
-        //     toolTip.style("display", "block");
-        //     toolTip.html(`Pizzas eaten:`)
-        //         .style("left", d3.event.pageX + "px")
-        //         .style("top", d3.event.pageY + "px");
-        // })
-        //     // Step 3: Add an onmouseout event to make the tooltip invisible
-        //     .on("mouseout", function () {
-        //         toolTip.style("display", "none");
-        //     });
 
     });
