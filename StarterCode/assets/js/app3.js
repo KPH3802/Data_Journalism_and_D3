@@ -147,13 +147,13 @@ d3.csv("assets/data/data.csv").then(function (StateData, error) {
 
     // circlesGroup.append("text")
     //     .text(function (d) { return d.abbr })
-    //     .attr("dx", d => xLinearScale(d[chosenXAxis])
-    //     .attr("dy", d => yLinearScale(d.healthcare))
+    //     .attr("cx", d => xLinearScale(d[chosenXAxis]))
+    //     .attr("cy", d => yLinearScale(d.healthcare))
     //     .style("text-anchor", "middle")
-    //     .attr("font-size", 8)
-    //     .attr("fill", "white")
-    //     .attr("r", 10)
-    //     .attr("opacity", ".5");
+    //     .attr("font-size", 6)
+    //     .attr("fill", "black")
+    //     .attr("r", 8);
+        // .attr("opacity", ".5");
 
     // Create group for  2 x- axis labels
     var labelsGroup = chartGroup.append("g")
