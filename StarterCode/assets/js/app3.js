@@ -65,19 +65,21 @@ function renderCircles(circlesGroup, newXScale, chosenXaxis) {
 function updateToolTip(chosenXAxis, circlesGroup) {
 
     if (chosenXAxis === "poverty") {
-        var label = "Poverty:";
+        var label = "% In Poverty";
+    }
+    else if (chosenXAxis === "income") {
+        var label = "Household Income (Median)"
+
     }
     else {
-        var label = "Age:";
+        var label = "Median Age";
     }
 
     var toolTip = d3.tip()
         .attr("class", "tooltip")
         .offset([80, -60])
-        // .style("left", d3.select(this).attr("cx") + "px")
-        // .style("top", d3.select(this).attr("cy") + "px")
         .html(function (d) {
-            return (`${d.state}<br> Healthcare: ${d.healthcare} <br> ${label} : ${d[chosenXAxis]}`)
+            return (`${d.state}<br>Lacks Healthcare: ${d.healthcare}%<br> ${label} : ${d[chosenXAxis]}`)
         });
     ;
 
@@ -162,14 +164,21 @@ d3.csv("assets/data/data.csv").then(function (StateData, error) {
         .attr("y", 20)
         .attr("value", "poverty") // value to grab for event listener
         .classed("active", true)
-        .text("% Poverty");
+        .text("In Poverty (%)");
 
     var ageLabel = labelsGroup.append("text")
         .attr("x", 0)
         .attr("y", 40)
         .attr("value", "age") // value to grab for event listener
         .classed("inactive", true)
-        .text("Age");
+        .text("Age (Median)");
+
+    var incomeLabel = labelsGroup.append("text")
+        .attr("x", 0)
+        .attr("y", 60)
+        .attr("value", "income") // value to grab for event listener
+        .classed("inactive", true)
+        .text("Household Income (Median)");
 
     // append y axis
     chartGroup.append("text")
@@ -178,7 +187,7 @@ d3.csv("assets/data/data.csv").then(function (StateData, error) {
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .classed("axis-text", true)
-        .text("Healthcare");
+        .text("Lacks Healthcare (%)");
 
     // updateToolTip function above csv import
     var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
@@ -216,6 +225,21 @@ d3.csv("assets/data/data.csv").then(function (StateData, error) {
                     povertyLabel
                         .classed("active", false)
                         .classed("inactive", true);
+                    incomeLabel
+                        .classed("active", false)
+                        .classed("inactive", true);
+                }
+                else if (chosenXAxis === "income") {
+                    ageLabel
+                        .classed("active", false)
+                        .classed("inactive", true);
+                    povertyLabel
+                        .classed("active", false)
+                        .classed("inactive", true);
+                    incomeLabel
+                        .classed("active", true)
+                        .classed("inactive", false);
+
                 }
                 else {
                     ageLabel
@@ -224,6 +248,9 @@ d3.csv("assets/data/data.csv").then(function (StateData, error) {
                     povertyLabel
                         .classed("active", true)
                         .classed("inactive", false);
+                    incomeLabel
+                        .classed("active", false)
+                        .classed("inactive", true);
                 }
             }
         });
