@@ -83,7 +83,7 @@ d3.csv("assets/data/data.csv")
         scatterGroup.append("text")
             .attr("transform", "rotate(-90)")
             .attr("x", 0 - (height / 2))
-            .attr("y", 0-margin.left)
+            .attr("y", 0-(margin.left/2))
             // .attr("dy", "1em")
             .classed("active", true)
             .text("% Healthcare");
